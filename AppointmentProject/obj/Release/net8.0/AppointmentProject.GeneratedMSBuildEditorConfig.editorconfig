@@ -9,13 +9,13 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AppointmentProject
 build_property.RootNamespace = AppointmentProject
-build_property.ProjectDir = C:\Users\MEGA\Source\Repos\AhmedEmadkh\AppointmentITI\AppointmentProject\
+build_property.ProjectDir = C:\Users\MEGA\source\repos\AhmedEmadkh\AppointmentITI\AppointmentProject\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\MEGA\Source\Repos\AhmedEmadkh\AppointmentITI\AppointmentProject
+build_property.MSBuildProjectDirectory = C:\Users\MEGA\source\repos\AhmedEmadkh\AppointmentITI\AppointmentProject
 build_property._RazorSourceGeneratorDebug = 
 
 [C:/Users/MEGA/source/repos/AhmedEmadkh/AppointmentITI/AppointmentProject/Views/Account/ForgotPassword.cshtml]
@@ -40,6 +40,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/MEGA/source/repos/AhmedEmadkh/AppointmentITI/AppointmentProject/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/MEGA/source/repos/AhmedEmadkh/AppointmentITI/AppointmentProject/Views/Home/SignIn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWduSW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/MEGA/source/repos/AhmedEmadkh/AppointmentITI/AppointmentProject/Views/Home/SignUp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWduVXAuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/MEGA/source/repos/AhmedEmadkh/AppointmentITI/AppointmentProject/Views/Shared/Error.cshtml]
