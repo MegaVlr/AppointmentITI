@@ -11,6 +11,7 @@ namespace AppointmentProject.Data
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public AppointmentDbContext(DbContextOptions<AppointmentDbContext> options) : base(options)
         {
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
