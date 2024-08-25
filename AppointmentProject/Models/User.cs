@@ -12,6 +12,6 @@
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<PasswordReset> PasswordResets { get; set; }
         public ICollection<ActivityLog> ActivityLogs { get; set; }
-        public ICollection<Notification> Notifications { get; set; }
+      
     }
 }

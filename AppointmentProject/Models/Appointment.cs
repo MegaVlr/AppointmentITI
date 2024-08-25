@@ -12,5 +12,6 @@
 
         // Navigation property
         public User User { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
     }
 }
