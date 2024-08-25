@@ -20,3 +20,110 @@ html {
 body {
   margin-bottom: 60px;
 }
+body {
+    background: #f7ecde;
+    font-family: "Titillium Web", sans-serif;
+}
+
+h1 {
+    color: black;
+}
+
+input,
+textarea {
+    background-color: transparent !important;
+    color: #fff !important;
+}
+
+    input::placeholder {
+        color: black !important;
+    }
+
+.form-control {
+    box-shadow: none !important;
+}
+
+.groub-box {
+    box-shadow: -5px 2px 54px -9px rgba(0, 0, 0, 1);
+}
+
+.btn-outline-info {
+    color: #17a2b8;
+    background-color: transparent;
+    background-image: none;
+    border-color: #17a2b8;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.5);
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.btn-outline-warning {
+    color: #ffc107;
+    background-color: transparent;
+    background-image: none;
+    border-color: #ffc107;
+}
+
+.sing-up {
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+    .sing-up:hover {
+        text-decoration: underline;
+    }
+
+.is-not-valid {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3E%3Ccircle cx='6' cy='6' r='4.5'/%3E%3Cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3E%3Ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3E%3C/svg%3E") no-repeat right center / 20px 20px;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-color: #fff;
+    border-color: red;
+}
+
+    .is-not-valid:focus {
+        border-color: red;
+        box-shadow: 0 0 0 0.25rem rgba(255, 0, 0, 0.25) !important;
+    }
+
+.is-valid {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23198754' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3E%3C/svg%3E") no-repeat right center / 20px 20px;
+    background-color: #fff;
+    background-position: right calc(0.375em + 0.1875rem) center;
+}
+
+    .is-valid:focus {
+        border-color: #3ca55c;
+        box-shadow: 0 0 0 0.25rem rgba(60, 165, 92, 0.25);
+    }
+
+@media all and (min-width: 1201px) {
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 15px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    input {
+        width: 100% !important;
+    }
+
+    .groub-box {
+        width: 100% !important;
+    }
+}
+
+@media all and (min-width: 0px) and (max-width: 600px) {
+    .err-list {
+        font-size: 13px !important;
+    }
+
+    .err-p {
+        font-size: 20 !important;
+    }
+}

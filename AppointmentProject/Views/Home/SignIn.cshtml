@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Sign In";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/css/all.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-reboot.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="~/css/style.css">
+    <!-- Media CSS -->
+    <link rel="stylesheet" href="~/css/media.css">
+</head>
+<body>
+    <div class="container my-5 text-center">
+        <div class="groub-box m-auto w-75 p-5">
+            <h1 class="">Smart Login System</h1>
+            <form method="post" action="@Url.Action("SignIn", "Home")">
+                <input type="text" name="Email" id="emailLogin" class="form-control my-3 text-black" placeholder="Enter Your Email">
+                <input type="password" name="Password" id="passLogin" class="form-control my-3 text-black" placeholder="Enter Your Password">
+                <p id="incorrect" class="d-none">
+                    <span class="text-danger">Incorrect email or password</span>
+                </p>
+                <p id="allReq" class="d-none">
+                    <span class="text-danger">All inputs required</span>
+                </p>
+                <button type="submit" id="loginBtn" class="btn btn-outline-info w-100 my-3">
+                    Login
+                </button>
+            </form>
+            <a href="@Url.Action("ForgotPassword", "Account")" class="d-block my-2 text-info">Forgot your password?</a>
+            <p class="text-black fs-5">Don’t have an account? <a class="text-black sing-up" href="@Url.Action("SignUp", "Home")">Sign Up</a></p>
+        </div>
+    </div>
+
+    <script src="~/JS/bootstrap.bundle.min.js"></script>
+    <script src="~/JS/login.js"></script>
+</body>
+</html>

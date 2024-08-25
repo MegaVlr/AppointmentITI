@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/css/all.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-reboot.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="~/css/style.css">
+    <!-- Media CSS -->
+    <link rel="stylesheet" href="~/css/media.css">
+</head>
+<body>
+    <div class="container my-5 text-center">
+        <div class="groub-box m-auto w-75 p-5">
+            <h1>Smart Login System</h1>
+            <form method="post" action="/Home/SignUp">
+                <input type="text" name="name" class="form-control my-3 text-black" placeholder="Enter Your Name">
+                <input type="text" name="email" class="form-control my-3 text-black" placeholder="Enter Your Email">
+                <input type="password" name="password" class="form-control my-3 text-black" placeholder="Enter Your Password">
+                <p class="text-danger">@ViewBag.Message</p>
+                <button type="submit" class="btn btn-outline-info w-100 my-3">Sign Up</button>
+            </form>
+            <p class="text-black fs-5">Already have an account? <a class="text-black sing-up" href="@Url.Action("SignIn", "Home")">Sign In</a></p>
+        </div>
+    </div>
+
+    <script src="~/JS/bootstrap.bundle.min.js"></script>
+    <script src="~/JS/signup.js"></script>
+</body>
+</html>

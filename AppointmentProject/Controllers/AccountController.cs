@@ -6,6 +6,7 @@ using AppointmentProject.Models.ViewModels;
 using AppointmentProject.Data;
 using AppointmentProject.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentProject.Controllers
 {
@@ -127,5 +128,79 @@ namespace AppointmentProject.Controllers
             // Password hashing logic
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
+
+        // GET: /Account/SignUp
+        [HttpGet]
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        // POST: /Account/SignUp
+        [HttpPost]
+        public IActionResult SignUp(string name, string email, string password)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                ViewBag.Message = "All fields are required.";
+                return View();
+            }
+
+            // Check if email already exists
+            var existingUser = _context.Users.SingleOrDefault(u => u.Email == email);
+            if (existingUser != null)
+            {
+                ViewBag.Message = "Email already exists.";
+                return View();
+            }
+
+            // Hash the password
+            var hashedPassword = HashPassword(password);
+
+            // Create new user
+            var newUser = new User
+            {
+                Name = name,
+                Email = email,
+                PasswordHash = hashedPassword,
+            };
+
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
+
+            ViewBag.Message = "Registration successful!";
+            return View();
+        }
+
+        // GET: /Account/SignIn
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        // POST: /Account/SignIn
+        [HttpPost]
+        public async Task<IActionResult> SignIn(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                ViewData["ErrorMessage"] = "All inputs required";
+                return View();
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            {
+                //---------------------------------------------
+                // Set up authentication cookies or tokens here
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewData["ErrorMessage"] = "Incorrect email or password";
+            return View();
+        }
+
     }
 }
