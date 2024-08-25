@@ -4,6 +4,7 @@
     {
         public int UserId { get; set; }  // Primary Key
         public string Email { get; set; }
+        public string Name { get; set; }
         public string PasswordHash { get; set; }
 
         // Navigation properties
