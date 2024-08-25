@@ -10,9 +10,11 @@ namespace AppointmentProject.Configure
         public void Configure(EntityTypeBuilder<Appointment> builder)
         {
             //Properits 
-
+            builder.Property(d=>d.AppointmentDate).IsRequired();
+            builder.HasIndex(n => n.AppointmentDate);
             //Title
-            builder.Property(n => n.Title).HasMaxLength(60);
+            builder.Property(n => n.Title).HasMaxLength(60).IsRequired(); 
+            builder.HasIndex(n => n.Title);
 
             //Relationships
             
