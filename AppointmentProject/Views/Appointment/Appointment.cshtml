@@ -4,5 +4,79 @@
 @{
     ViewData["Title"] = "Appointments";
 }
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Hello</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Righteous&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="~/css/Appointments.css">
+</head>
+
+<body>
+    <main class="py-5">
+        <div class="container d-flex flex-column justify-content-center align-items-center">
+            <h1>Appointments</h1>
+            <h2 id="nameTitle" class="font"></h2>
+            <div class="body w-100 p-3 py-4 mt-5 d-flex flex-column justify-content-center align-items-center gap-4">
+                <h2>
+                    <i class="fa-solid fa-bookmark mr-2"></i>
+                    Save your favorite Appointments
+                    <i class="fa-solid fa-bookmark ml-2"></i>
+                </h2>
+
+                <form method="post" action="/Appointment/Submit" class="body w-100 p-3 py-4 mt-5 d-flex flex-column justify-content-center align-items-center gap-4 ">
+                    <div class="Title-name w-100">
+                        <label for="Title" class="fw-bold"><i class="fa-solid fa-file-signature"></i> Title</label>
+                        <input type="text" placeholder="Title" class="form-control mt-3" id="Title" oninput="validateName(this.value)">
+                    </div> 
+                    <div class="Description w-100">
+                        <label for="Description" class="fw-bold"><i class="fa-solid fa-audio-description"></i> Description</label>
+                        <textarea type="text" placeholder="Description" class="form-control mt-3" id="Description" oninput="validateInputURL(this.value)"></textarea>
+                    </div>
+                    <div class="Time w-100">
+                        <label for="AppointmentDate" class="fw-bold"><i class="fa-solid fa-clock"></i> Appointment Date</label>
+                        <input type="datetime-local" placeholder="Appointment Date" class="form-control mt-3" id="AppointmentDate" oninput="validateInputURL(this.value)">
+                    </div>
+                    <button class="btn btn-submit px-5" id="submitBtn">Submit</button>
+                </form>
+
+
+
+
+                <table class="table mt-4 text-center bg-light">
+                    <thead>
+                        <tr>
+                            <th class="text-capitalize">Index</th>
+                            <th class="text-capitalize">Title</th>
+                            <th class="text-capitalize">Description</th>
+                            <th class="text-capitalize">Date</th>
+                            <th class="text-capitalize">Edit/Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var appointment in Model)
+                        {
+                            <tr>
+                                <td>@appointment.Index</td>
+                                <td>@appointment.Title</td>
+                                <td>@appointment.Description</td>
+                                <td>@appointment.AppointmentDate.ToString("MM/dd/yyyy")</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", new { id = appointment.Id })">Edit</a> |
+                                    <a href="@Url.Action("Delete", new { id = appointment.Id })">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+    </main>
+</body>
+
+</html>
