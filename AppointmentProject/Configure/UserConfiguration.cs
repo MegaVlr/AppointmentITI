@@ -16,8 +16,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.Email).HasMaxLength(90).IsRequired().HasColumnOrder(1).HasComment("Email User");
         //Password
         builder.Property(n => n.PasswordHash).HasMaxLength(64).IsRequired().HasColumnOrder(2).HasComment("Password User");
+        //phone 
+        builder.Property(p => p.phoneNumber).HasMaxLength(18).IsRequired().HasColumnOrder(3).HasComment("Phone User");
+        builder.HasIndex(u => u.phoneNumber).IsUnique();
         //CreatedDate 
-        builder.Property(d=>d.CreatedDate).IsRequired().HasColumnOrder(3).HasComment("This CreatedDate For User");
+        builder.Property(d=>d.CreatedDate).IsRequired().HasColumnOrder(4).HasComment("This CreatedDate For User");
 
         //Relationships
         // User-Appointment Relationship (One-to-Many)
