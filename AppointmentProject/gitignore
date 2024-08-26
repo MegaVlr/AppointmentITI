@@ -22,3 +22,8 @@ obj/
 
 # Ignore IDE-specific files
 .idea/
+
+# Ignore Json File
+appsettings.json
+appsettings.Development.json
+

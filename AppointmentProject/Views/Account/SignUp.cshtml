@@ -23,12 +23,13 @@
 <body>
     <div class="container my-5 text-center">
         <div class="groub-box m-auto w-75 p-5">
-            <h1> Login </h1>
-            <form method="post" action="/Home/SignUp">
+            <h1> SignUp </h1>
+            <form method="post" action="/Account/SignUp">
                 <input type="text" name="name" class="form-control my-3 text-black" placeholder="Enter Your Name">
                 <input type="text" name="email" class="form-control my-3 text-black" placeholder="Enter Your Email">
                 <input type="password" name="password" class="form-control my-3 text-black" placeholder="Enter Your Password">
-                <p class="text-danger">@ViewBag.Message</p>
+                <input type="tel" name="phoneNumber" class="form-control my-3 text-black" placeholder="Enter Your Number">
+                <p class="text-danger">@ViewData["ErrorMessage"]</p>
                 <button type="submit" class="btn btn-outline-info w-100 my-3">Sign Up</button>
             </form>
             <p class="text-black fs-5">Already have an account? <a class="text-black sing-up" href="@Url.Action("SignIn", "Account")">Sign In</a></p>

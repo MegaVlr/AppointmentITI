@@ -23,12 +23,12 @@
 <body>
     <div class="container my-5 text-center">
         <div class="groub-box m-auto w-75 p-5">
-            <h1 class=""> Login </h1>
+            <h1 class=""> SignIn </h1>
             <form method="post" action="@Url.Action("SignIn", "Account")">
                 <input type="text" name="Email" id="emailLogin" class="form-control my-3 text-black" placeholder="Enter Your Email">
                 <input type="password" name="Password" id="passLogin" class="form-control my-3 text-black" placeholder="Enter Your Password">
                 <p id="incorrect" class="d-none">
-                    <span class="text-danger">Incorrect email or password</span>
+                    <span class="text-danger">@ViewBag.E</span>
                 </p>
                 <p id="allReq" class="d-none">
                     <span class="text-danger">All inputs required</span>

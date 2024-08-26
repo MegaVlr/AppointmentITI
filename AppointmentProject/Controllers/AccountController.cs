@@ -138,9 +138,9 @@ namespace AppointmentProject.Controllers
 
         // POST: /Account/SignUp
         [HttpPost]
-        public IActionResult SignUp(string name, string email, string password)
+        public IActionResult SignUp(string name, string email, string password,string PhoneNumber)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(PhoneNumber))
             {
                 ViewBag.Message = "All fields are required.";
                 return View();
@@ -148,9 +148,15 @@ namespace AppointmentProject.Controllers
 
             // Check if email already exists
             var existingUser = _context.Users.SingleOrDefault(u => u.Email == email);
+            var existingPhoneNumber = _context.Users.SingleOrDefault(p => p.phoneNumber == PhoneNumber);
             if (existingUser != null)
             {
                 ViewBag.Message = "Email already exists.";
+                return View();
+            }
+            if (existingPhoneNumber != null)
+            {
+                ViewBag.Message = "PhoneNumber already exists.";
                 return View();
             }
 
@@ -163,6 +169,8 @@ namespace AppointmentProject.Controllers
                 Name = name,
                 Email = email,
                 PasswordHash = hashedPassword,
+                phoneNumber = PhoneNumber,
+                CreatedDate = DateTime.Now
             };
 
             _context.Users.Add(newUser);

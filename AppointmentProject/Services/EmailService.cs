@@ -8,8 +8,8 @@ public class EmailService : IEmailService
     public Task SendEmailAsync(string email, string subject, string message)
     {
         // Define the sender's email and password for SMTP authentication
-        string mail = "tutoriatseu-dev@outlook.com";
-        string password = "Test123U5678!";
+        string mail = "Moa3ydy@outlook.com";
+        string password = "M@1234@@";
 
         // Create a new instance of SmtpClient and configure it
         var client = new SmtpClient("smtp.outlook.com")
