@@ -18,7 +18,8 @@ namespace AppointmentProject.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            //Create Schema
+            modelBuilder.HasDefaultSchema("Appo");
             // User Configuration
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             // ActivityLog Configuration
