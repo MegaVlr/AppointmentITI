@@ -27,8 +27,8 @@
             <form method="post" action="@Url.Action("SignIn", "Account")">
                 <input type="text" name="Email" id="emailLogin" class="form-control my-3 text-black" placeholder="Enter Your Email">
                 <input type="password" name="Password" id="passLogin" class="form-control my-3 text-black" placeholder="Enter Your Password">
-                <p id="incorrect" class="d-none">
-                    <span class="text-danger">@ViewBag.E</span>
+                <p id="incorrect" class="">
+                    <span class="text-danger">@ViewData["ErrorMessage"]</span>
                 </p>
                 <p id="allReq" class="d-none">
                     <span class="text-danger">All inputs required</span>

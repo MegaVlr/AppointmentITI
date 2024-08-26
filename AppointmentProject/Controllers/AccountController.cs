@@ -25,7 +25,8 @@ namespace AppointmentProject.Controllers
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-            return View();
+            var model = new ForgotPasswordViewModel();
+            return View(model);
         }
 
         // POST: /Account/ForgotPassword
@@ -59,14 +60,23 @@ namespace AppointmentProject.Controllers
                     await _emailService.SendEmailAsync(user.Email, "Password Reset Request",
                         $"Please reset your password by clicking <a href='{resetLink}'>here</a>.");
 
-                    return RedirectToAction("ForgotPasswordConfirmation");
+                    // Success message - email sent
+                    ViewData["Message"] = "An email with a password reset link has been sent to your email address. Please check your inbox.";
+                    return View(model);
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Email not found.");
+                    // Email not found
+                    ViewData["Message"] = "The email address you entered is not associated with any account.";
                 }
             }
+            else
+            {
+                // Model state is invalid
+                ViewData["Message"] = "Please enter a valid email address.";
+            }
 
+            // Return the view with the message
             return View(model);
         }
 
@@ -101,15 +111,24 @@ namespace AppointmentProject.Controllers
                         resetEntry.IsUsed = true;
                         await _context.SaveChangesAsync(); // Use async save method
 
+                        // Optionally set a success message in ViewData if you want to show it on the view
+                        ViewData["SuccessMessage"] = "Your password has been reset successfully.";
                         return RedirectToAction("ResetPasswordConfirmation");
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "User not found.");
+                    }
                 }
-
-                ModelState.AddModelError("", "Invalid token or token expired.");
+                else
+                {
+                    ModelState.AddModelError("", "Invalid token or token expired.");
+                }
             }
-
+            // Return the view with the model and any validation errors
             return View(model);
         }
+
 
         // GET: /Account/ForgotPasswordConfirmation
         public IActionResult ForgotPasswordConfirmation()

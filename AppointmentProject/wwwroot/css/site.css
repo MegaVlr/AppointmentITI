@@ -99,6 +99,57 @@ textarea {
         box-shadow: 0 0 0 0.25rem rgba(60, 165, 92, 0.25);
     }
 
+/* CSS for Navigation Bar */
+.navbar {
+    background-color: #1a1a1a; /* Dark Gray */
+    color: #ffffff; /* White text/icons */
+}
+
+    .navbar a {
+        color: #f0c600; /* Yellow for links or icons */
+    }
+
+        .navbar a:hover {
+            color: #ffffff; /* White on hover */
+        }
+
+
+
+/* Style the Error Box in the ResetPassword */
+
+/* Style the container */
+.validation-summary {
+    background-color: #f8d7da; /* Light red background for the summary */
+    border: 1px solid #f5c6cb; /* Red border */
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px; /* Space below the summary */
+}
+
+    /* Style the error messages */
+    .validation-summary p.text-danger {
+        color: #721c24; /* Dark red text color */
+        font-weight: bold; /* Make the text bold */
+        margin: 0; /* Remove default margins */
+    }
+
+    /* Style individual error messages */
+    .validation-summary ul li {
+        list-style-type: none; /* Remove bullet points */
+        margin-left: 0; /* Align text to the left */
+        margin-bottom: 5px; /* Space between error messages */
+    }
+
+        /* Additional styles for link or specific text inside error messages */
+        .validation-summary ul li a {
+            color: #721c24; /* Match link color with the text color */
+            text-decoration: underline; /* Underline the link */
+        }
+
+
+
+
+/* Responsive */
 @media all and (min-width: 1201px) {
 }
 

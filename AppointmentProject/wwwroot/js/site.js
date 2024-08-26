@@ -19,18 +19,15 @@ document.getElementById('forgotBtn').addEventListener('click', function () {
 });
 
 //Reset Password
-document.getElementById('resetBtn').addEventListener('click', function () {
-    var newPassword = document.getElementById('newPassword').value;
+document.getElementById('resetBtn').addEventListener('click', function (e) {
+    var password = document.getElementById('newPassword').value;
     var confirmPassword = document.getElementById('confirmPassword').value;
 
-    // Add your validation and AJAX logic here to reset the password.
-
-    if (newPassword === confirmPassword) {
-        document.getElementById('passwordReset').classList.remove('d-none');
-        document.getElementById('passwordMismatch').classList.add('d-none');
-    } else {
+    if (password !== confirmPassword) {
+        e.preventDefault(); // Prevent form submission
         document.getElementById('passwordMismatch').classList.remove('d-none');
-        document.getElementById('passwordReset').classList.add('d-none');
+    } else {
+        document.getElementById('passwordMismatch').classList.add('d-none');
     }
 });
 
