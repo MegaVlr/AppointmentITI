@@ -1,6 +1,10 @@
 ﻿@using Azure.Core;
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
+<!-- Conditionally display sign-in, sign-up, and sign-out buttons -->
+@{
+    var isLoggedIn = Context.Request.Cookies["authToken"] != null;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,21 +33,25 @@
                 </button>
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    
                     <ul class="navbar-nav flex-grow-1">
+                        @if (isLoggedIn)
+                        {
                         <li class="nav-item">
                             <a class="nav-link text-dark btn btn-info px-3 m-1" asp-area="" asp-controller="Appointment" asp-action="Appointment">Appointments</a>
                         </li>
+                        
+                            
                         <li class="nav-item">
                             <a class="nav-link text-dark btn btn-primary px-3 m-1" asp-area="" asp-controller="Appointment" asp-action="Create">Create</a>
                         </li>
+                        }
+
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
-                        <!-- Conditionally display sign-in, sign-up, and sign-out buttons -->
-                        @{
-                            var isLoggedIn = Context.Request.Cookies["authToken"] != null;
-                        }
+                       
                         @if (!isLoggedIn)
                         {
                             <li class="nav-item">
@@ -55,6 +63,11 @@
                         }
                         else
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-light btn btn-secondary px-3 m-1" href="@Url.Action("Logout", "Account")">User</a>
+                            </li>
+                                
+                            
                             <li class="nav-item">
                                 <a class="nav-link text-dark btn btn-danger px-3 m-1" href="@Url.Action("Logout", "Account")">Log Out</a>
                             </li>

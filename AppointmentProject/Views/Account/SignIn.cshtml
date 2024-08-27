@@ -16,8 +16,8 @@
         <div class="groub-box m-auto w-75 p-5">
             <h1 class=""> SignIn </h1>
             <form method="post" action="@Url.Action("SignIn", "Account")" onsubmit="storeToken()">
-                <input type="text" name="Email" id="emailLogin" class="form-control my-3 text-black" placeholder="Enter Your Email">
-                <input type="password" name="Password" id="passLogin" class="form-control my-3 text-black" placeholder="Enter Your Password">
+                <input type="text" name="Email" id="emailLogin" class="form-control my-3 text-black" placeholder="Enter Your Email" required maxlength="90" >
+                <input type="password" name="Password" id="passLogin" class="form-control my-3 text-black" placeholder="Enter Your Password" required maxlength="64">
                 <p id="incorrect" class="">
                     <span class="text-danger">@ViewData["ErrorMessage"]</span>
                 </p>
