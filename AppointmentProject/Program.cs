@@ -14,6 +14,9 @@ namespace AppointmentProject
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddHostedService<NotificationBackgroundService>();
+            builder.Logging.AddConsole(); // See the logging in the console 
 
             builder.Services.AddDbContext<AppointmentDbContext>(options =>
             {
