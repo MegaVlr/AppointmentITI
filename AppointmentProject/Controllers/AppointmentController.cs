@@ -14,7 +14,6 @@ namespace AppointmentProject.Controllers
         {
             _context = context;
         }
-       
         // GET: /Appointment/Appointment
         [HttpGet]
         public IActionResult Appointment()
@@ -23,7 +22,6 @@ namespace AppointmentProject.Controllers
             List <Appointment> appointments = _context.Appointments.ToList(); // Fetch all appointments
             return View(appointments);
         }
-
         // Get: /Appointment/AddAppointment
         [HttpGet]
         public IActionResult Create()
@@ -50,7 +48,21 @@ namespace AppointmentProject.Controllers
                 CreatedDate = DateTime.Now,
             };
             _context.Appointments.Add(newAppointment);
-            int result = _context.SaveChanges(); 
+            int result = _context.SaveChanges();
+
+
+            if (result > 0)
+            {
+                var newNotification = new Notification
+                {
+                    AppointmentId = newAppointment.AppointmentId, // ربط الإشعار بالموعد
+                    Notification_Data_Time = AppointmentDate.AddHours(-1),
+                    IsSent = false
+                };
+
+                _context.Notifications.Add(newNotification);
+                _context.SaveChanges();
+            }
             return RedirectToAction("appointment");
         }
         // GET: /Appointment/Edit/{id}
@@ -65,7 +77,6 @@ namespace AppointmentProject.Controllers
             ViewBag.Appointment = this._context.Appointments.ToList();
             return View("Create", appointment);
         }
-
         // POST: /Appointment/EditAppointment/{id}
         [HttpPost]
         public IActionResult Edit(int id, string Title, string Description, DateTime AppointmentDate)
@@ -88,12 +99,25 @@ namespace AppointmentProject.Controllers
             appointment.AppointmentDate = AppointmentDate;
 
             _context.Appointments.Update(appointment);
-            _context.SaveChanges();
+            int result = _context.SaveChanges();
 
             TempData["Message"] = "Appointment updated successfully.";
+
+            if (result > 0)
+            {
+                var editNotification = _context.Notifications.FirstOrDefault(n => n.AppointmentId == appointment.AppointmentId);
+                if (editNotification != null)
+                {
+                    editNotification.Notification_Data_Time = AppointmentDate.AddHours(-1); // تحديث الإشعار ليكون قبل الموعد بساعة
+                    editNotification.IsSent = false;
+
+                    _context.Notifications.Update(editNotification);
+                    _context.SaveChanges();
+                }
+            }
+
             return RedirectToAction("appointment");
         }
-
         // GET: /Appointment/DeleteAppointment/{id}
         [HttpGet]
         public IActionResult Delete(int id)

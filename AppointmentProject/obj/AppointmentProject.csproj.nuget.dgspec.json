@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj": {}
+    "C:\\Users\\MEGA\\source\\repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj": {
+    "C:\\Users\\MEGA\\source\\repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
+        "projectUniqueName": "C:\\Users\\MEGA\\source\\repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
         "projectName": "AppointmentProject",
-        "projectPath": "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
+        "projectPath": "C:\\Users\\MEGA\\source\\repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
         "packagesPath": "C:\\Users\\MEGA\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\obj\\",
         "projectStyle": "PackageReference",
