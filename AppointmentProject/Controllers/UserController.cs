@@ -1,9 +1,10 @@
 ﻿using AppointmentProject.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using System.Linq;
 using AppointmentProject.Models;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace AppointmentProject.Controllers
 {
@@ -11,14 +12,21 @@ namespace AppointmentProject.Controllers
     {
         private readonly AppointmentDbContext _context;
         private readonly IConfiguration _configuration;
-
         public UserController(AppointmentDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
-
-        public User GetUserFromCookie()
+        private bool IsUserAuthenticated()
+        {
+            var token = Request.Cookies["authToken"];
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+            return true;
+        }
+        private User GetUserFromCookie()
         {
             if (Request.Cookies.TryGetValue("authToken", out var token))
             {
@@ -28,18 +36,15 @@ namespace AppointmentProject.Controllers
                 var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
                 if (userIdClaim != null)
                 {
-                    // Convert userId from string to int
                     if (int.TryParse(userIdClaim.Value, out var userId))
                     {
                         return _context.Users.Find(userId);
                     }
                 }
             }
-
             return null;
         }
         [HttpGet]
-        // Action to display user information
         public IActionResult User()
         {
             var user = GetUserFromCookie();
@@ -49,30 +54,34 @@ namespace AppointmentProject.Controllers
                 return View();
             }
 
-            return RedirectToAction("SignIn");
+            return RedirectToAction("User");
         }
 
-        // GET: /User/EditUser/{id}
         [HttpGet]
         public IActionResult EditUser(int id)
         {
+            IsUserAuthenticated();
+
+            if (IsUserAuthenticated() == false)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
+
+            var appointment = _context.Appointments.FirstOrDefault(a => a.AppointmentId == id);
             var user = _context.Users.FirstOrDefault(u => u.UserId == id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            ViewBag.User = user; 
-            return View("EditUser", user); 
+            ViewBag.User = user;
+            return View(user);
         }
 
-        // POST: /User/EditAppointment/{id}
-        [HttpPost]
-        // POST: /User/EditUser/{id}
         [HttpPost]
         public IActionResult EditUser(int id, string Name, string Email, string PhoneNumber)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserId == id); // تغيير Appointments إلى Users
+            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
             if (user == null)
             {
                 return NotFound();
@@ -84,7 +93,6 @@ namespace AppointmentProject.Controllers
                 return View(user);
             }
 
-            // Check if email already exists (excluding the current user)
             var existingUser = _context.Users
                 .SingleOrDefault(u => u.Email == Email && u.UserId != id);
             if (existingUser != null)
@@ -93,7 +101,6 @@ namespace AppointmentProject.Controllers
                 return View(user);
             }
 
-            // Check if phone number already exists (excluding the current user)
             var existingPhoneNumber = _context.Users
                 .SingleOrDefault(p => p.phoneNumber == PhoneNumber && p.UserId != id);
             if (existingPhoneNumber != null)
@@ -102,42 +109,37 @@ namespace AppointmentProject.Controllers
                 return View(user);
             }
 
-            // Update user details
             user.Name = Name;
             user.Email = Email;
             user.phoneNumber = PhoneNumber;
 
             _context.Users.Update(user);
             int result = _context.SaveChanges();
-
             TempData["Message"] = "User updated successfully.";
-
-            if (result > 0)
-            {
-                // Optional: Add additional logic if needed
-            }
-
             return RedirectToAction("User");
         }
 
-        // GET: /User/ChangePassword/{id}
         [HttpGet]
-        public IActionResult ChangePassword() {
-            
-            
-            return View(); }
-        // POST: /User/ChangePassword/{id}
+        public IActionResult ChangePassword()
+        {
+            IsUserAuthenticated();
+
+            if (IsUserAuthenticated() == false)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword)
         {
-            
             var user = GetUserFromCookie();
 
             if (user == null)
             {
-                return RedirectToAction("SignIn"); // أو أي مسار مناسب إذا لم يكن المستخدم مسجلاً دخول
+                return RedirectToAction("SignIn");
             }
-
 
             if (!BCrypt.Net.BCrypt.Verify(oldPassword, user.PasswordHash))
             {
@@ -145,53 +147,70 @@ namespace AppointmentProject.Controllers
                 return View();
             }
 
-
             if (string.IsNullOrEmpty(newPassword) || newPassword.Length < 6)
             {
                 ViewData["ErrorMessage"] = "New password must be at least 6 characters long.";
-                return View(); 
+                return View();
             }
 
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
-
+            Response.Cookies.Delete("authToken");
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
             TempData["Message"] = "Password changed successfully.";
-            return RedirectToAction("User");
+            return RedirectToAction("SignIn", "ACcount");
         }
 
-        // GET: /User/DeleteUser/{id}
         [HttpGet]
-        public IActionResult DeleteUser()
-        {
-            return View();
-        }
-        // POST: /User/DeleteUser/{id}
-        [HttpPost]
         public IActionResult DeleteUser(int id)
         {
-            // ابحث عن المستخدم في قاعدة البيانات باستخدام المعرف (id)
+            IsUserAuthenticated();
+
+            if (IsUserAuthenticated() == false)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
+            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+
+
+            if (user == null)
+            {
+                ViewData["ErrorMessage"] = "User not found.";
+                return RedirectToAction("User");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteUser(int id, string Name)
+        {
+            IsUserAuthenticated();
+
+            if (IsUserAuthenticated() == false)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
             var user = _context.Users.FirstOrDefault(u => u.UserId == id);
 
             if (user == null)
             {
-                // إذا كان المستخدم غير موجود، عرض رسالة خطأ
                 ViewData["ErrorMessage"] = "User not found.";
                 return View();
             }
 
-            // احذف المستخدم من قاعدة البيانات
             _context.Users.Remove(user);
-            _context.SaveChanges();
+            var result = _context.SaveChanges();
 
-            // عرض رسالة تأكيد بأن الحذف تم بنجاح
-            ViewData["Message"] = "User deleted successfully.";
 
-            // إعادة توجيه إلى قائمة المستخدمين أو عرض صفحة الحذف مع الرسائل
-            return RedirectToAction("User", "User");
+            Response.Cookies.Delete("authToken");
+
+
+            ViewData["ErrorMessage"] = "No changes were saved. Please try again.";
+
+            TempData["Message"] = "Changes saved successfully.";
+            return RedirectToAction("index", "Home");
         }
-
     }
 }
-

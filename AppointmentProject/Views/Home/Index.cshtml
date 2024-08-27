@@ -1,12 +1,63 @@
 ﻿@{
     ViewData["Title"] = "Moa3ydy";
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Your App Name</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-5">
+        <h1 class="display-4">Welcome to Your Appointment Management System</h1>
+        <p class="lead">Easily manage your appointments</p>
+        <a href="@Url.Action("Create", "Appointment")" class="btn btn-outline-light btn-lg mt-3">Get Started</a>
+    </header>
 
-<div class="text-center">
-    
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fa fa-calendar fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">Manage Appointments</h5>
+                        <p class="card-text">Create, view, and manage your appointments with ease.</p>
+                        <a href="@Url.Action("Appointment", "Appointment")" class="btn btn-primary">View Appointments</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fa fa-user fa-3x mb-3 text-success"></i>
+                        <h5 class="card-title">Manage User</h5>
+                        <p class="card-text"> edit, and manage user within the system.</p>
+                        <a href="@Url.Action("EditUser", "User")" class="btn btn-success">Manage Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">About Our System</h5>
+                        <p class="card-text">
+                            Our appointment management system is designed to help you.
+                        </p>
+                        <a href="#" class="btn btn-outline-secondary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
 
-
-
-
-</div>

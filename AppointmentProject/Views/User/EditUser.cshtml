@@ -1,11 +1,9 @@
-﻿@model User;
+﻿@model User
 @{
     ViewBag.Title = "EditUser";
 }
 
-
-<!-- Form for editing a user (use a single user model instead of IEnumerable) -->
-<form method="post" asp-action="@ViewBag.Title" class="body w-100 p-3 py-4 mt-5 d-flex flex-column justify-content-center align-items-center gap-1">
+<form method="post" asp-action="EditUser" class="body w-100 p-3 py-4 mt-5 d-flex flex-column justify-content-center align-items-center gap-1">
     <div class="w-100">
         <label asp-for="Name" class="fw-bold">
             <i class="fa-solid fa-user"></i> Name
@@ -32,13 +30,14 @@
 
     <p id="messages" class="">
         <span class="text-danger">@ViewData["ErrorMessage"]</span>
-        <span class="text-danger">@ViewData["Message"]</span>
+        <span class="text-success">@ViewData["Message"]</span>
     </p>
-    <div class="w-100 m3 d-flex row-md justify-content-between align-items-center align-content-center">
+
+    <div class="w-100 m-3 d-flex row-md justify-content-between align-items-center">
         <a class="btn btn-light mr-2 w-25" href="@Url.Action("ChangePassword", "User")">Change Password</a>
         <a class="btn btn-warning px-5 m-0 w-25" href="@Url.Action("User", "User")">Back</a>
-        <a class="btn btn-danger mr-2 w-25" href="@Url.Action("DeleteUser", "User")">Delete User</a>
-
+        <a class="btn btn-danger mr-2 w-25" href="@Url.Action("DeleteUser", "User", new { id = Model.UserId })">Delete User</a>
     </div>
-        <button type="submit" class="btn btn-success px-5 m-0 w-25" id="submitBtn">Submit</button>
+
+    <button type="submit" class="btn btn-success px-5 m-0 w-25" id="submitBtn">Submit</button>
 </form>

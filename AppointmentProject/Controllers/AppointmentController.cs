@@ -1,5 +1,6 @@
 ﻿using AppointmentProject.Data;
 using AppointmentProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,11 +15,22 @@ namespace AppointmentProject.Controllers
         private readonly AppointmentDbContext _context;
         private readonly IConfiguration _configuration;
 
+
         public AppointmentController(AppointmentDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
+        private bool IsUserAuthenticated()
+        {
+            var token = Request.Cookies["authToken"];
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+            return true;
+        }
+
         // GET: /Appointment/Appointment
         [HttpGet]
         public IActionResult Appointment()
@@ -60,11 +72,17 @@ namespace AppointmentProject.Controllers
                 return RedirectToAction("SignIn", "Account");
             }
         }
-
         // Get: /Appointment/AddAppointment
         [HttpGet]
         public IActionResult Create()
         {
+            IsUserAuthenticated();
+
+            if (IsUserAuthenticated() == false)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
+
             ViewBag.Appointment = this._context.Appointments.ToList();
             return View();
         }
@@ -72,14 +90,13 @@ namespace AppointmentProject.Controllers
         [HttpPost]
         public IActionResult Create(string Title, string Description, DateTime AppointmentDate)
         {
-            // Ensure that the User is Logged In
-            var token = Request.Cookies["authToken"];
-            if (string.IsNullOrEmpty(token))
+            IsUserAuthenticated();
+
+            if (IsUserAuthenticated() == false)
             {
-                ViewData["ErrorMessage"] = "Please Login First";
                 return RedirectToAction("SignIn", "Account");
             }
-
+            var token = Request.Cookies["authToken"];
             // Validate and decode the token
             try
             {
@@ -115,14 +132,14 @@ namespace AppointmentProject.Controllers
                     CreatedDate = DateTime.Now,
                 };
                 _context.Appointments.Add(newAppointment);
-               var result = _context.SaveChanges();
+                var result = _context.SaveChanges();
 
                 if (result > 0)
                 {
                     var newNotification = new Notification
                     {
                         AppointmentId = newAppointment.AppointmentId,
-                        Notification_Data_Time = AppointmentDate.AddHours(-1), 
+                        Notification_Data_Time = AppointmentDate.AddHours(-1),
                         IsSent = false
                     };
 
@@ -140,12 +157,15 @@ namespace AppointmentProject.Controllers
                 return RedirectToAction("SignIn", "Account");
             }
         }
-
-
         // GET: /Appointment/Edit/{id}
         [HttpGet]
         public IActionResult Edit(int id)
-        {
+        {// Retrieve the token from the cookies
+            var token = Request.Cookies["authToken"];
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var appointment = _context.Appointments.FirstOrDefault(a => a.AppointmentId == id);
             if (appointment == null)
             {
@@ -154,6 +174,7 @@ namespace AppointmentProject.Controllers
             ViewBag.Appointment = this._context.Appointments.ToList();
             return View("Create", appointment);
         }
+
         // POST: /Appointment/EditAppointment/{id}
         [HttpPost]
         public IActionResult Edit(int id, string Title, string Description, DateTime AppointmentDate)
@@ -200,6 +221,12 @@ namespace AppointmentProject.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
+            IsUserAuthenticated();
+
+            if (IsUserAuthenticated() == false)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
             var appointment = _context.Appointments.FirstOrDefault(a => a.AppointmentId == id);
             if (appointment == null)
             {
@@ -237,6 +264,5 @@ namespace AppointmentProject.Controllers
             _context.ActivityLogs.Add(activityLog);
             _context.SaveChanges();
         }
-
     }
 }

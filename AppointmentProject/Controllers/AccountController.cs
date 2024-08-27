@@ -166,7 +166,7 @@ namespace AppointmentProject.Controllers
 
         // POST: /Account/SignUp
         [HttpPost]
-        public IActionResult SignUp(string name, string email, string password,string PhoneNumber)
+        public IActionResult SignUp(string name, string email, string password, string PhoneNumber)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(PhoneNumber))
             {
@@ -206,7 +206,21 @@ namespace AppointmentProject.Controllers
             // Log the creation action
             LogActivity(newUser.UserId, "First SignUp");
             ViewBag.Message = "Registration successful!";
-            return View();
+            // Generate token
+            var token = GenerateJwtToken(newUser);
+            Response.Cookies.Append("authToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = DateTime.UtcNow.AddHours(1) // Token expiration time
+            });
+
+            // Store token in ViewData to be accessed by JavaScript
+            ViewData["Token"] = token;
+
+            // Log the creation action
+            LogActivity(newUser.UserId, "SignedIn");
+            return RedirectToAction("Create", "Appointment");
         }
 
         // GET: /Account/SignIn
@@ -244,7 +258,7 @@ namespace AppointmentProject.Controllers
 
                 // Log the creation action
                 LogActivity(user.UserId, "SignedIn");
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Create", "Appointment");
             }
 
             ViewData["ErrorMessage"] = "Incorrect email or password";
@@ -273,14 +287,14 @@ namespace AppointmentProject.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
         [HttpGet]
         public IActionResult Logout()
         {
             // Remove the authToken cookie
             Response.Cookies.Delete("authToken");
             // Redirect to SignIn page
-            return RedirectToAction("SignIn", "Account");
+            return RedirectToAction("index", "Home");
+
         }
         public void LogActivity(int userId, string action)
         {

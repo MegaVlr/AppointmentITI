@@ -22,14 +22,5 @@ namespace AppointmentProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult SignUp()
-        {
-            return View();
-        }
-
-        public IActionResult SignIn()
-        {
-            return View(); // Ensure you have a SignIn.cshtml view if you use this action
-        }
     }
 }
