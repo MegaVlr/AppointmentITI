@@ -8,71 +8,67 @@ namespace AppointmentProject.Controllers
 {
     public class AppointmentController : Controller
     {
-
-
-
         private readonly AppointmentDbContext _context;
 
         public AppointmentController(AppointmentDbContext context)
         {
             _context = context;
         }
-
-        // GET: /Appointment/ShowApp
+       
+        // GET: /Appointment/Appointment
         [HttpGet]
-        public IActionResult ShowApp()
+        public IActionResult Appointment()
+            
         {
-            var appointments = _context.Appointments.ToList();
+            List <Appointment> appointments = _context.Appointments.ToList(); // Fetch all appointments
             return View(appointments);
         }
 
+        // Get: /Appointment/AddAppointment
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ViewBag.Appointment = this._context.Appointments.ToList();
+            return View();
+        }
         // POST: /Appointment/AddAppointment
         [HttpPost]
-        public IActionResult AddAppointment(string Title, string Description, DateTime AppointmentDate)
+       public IActionResult Create(string Title, string Description, DateTime AppointmentDate)
         {
-            if (string.IsNullOrEmpty(Title))
-            {
-                ModelState.AddModelError("", "All fields are required.");
-                return View();
-            }
-
             if (AppointmentDate < DateTime.Now)
             {
-                ModelState.AddModelError("", "Appointment date cannot be in the past.");
-                return View();
+                ViewData["ErrorMessage"] = "Appointment date cannot be in the past.";
+                return View("Create");
             }
 
-            // Create new appointment
             var newAppointment = new Appointment
             {
+                UserId = 1, 
                 Title = Title,
                 Description = Description,
                 AppointmentDate = AppointmentDate,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
             };
-
             _context.Appointments.Add(newAppointment);
-            _context.SaveChanges();
-
-            TempData["Message"] = "Appointment added successfully.";
-            return RedirectToAction("ShowApp"); // Redirect to the list of appointments
+            int result = _context.SaveChanges(); 
+            return RedirectToAction("appointment");
         }
-
-        // GET: /Appointment/EditAppointment/{id}
+        // GET: /Appointment/Edit/{id}
         [HttpGet]
-        public IActionResult EditAppointment(int id)
+        public IActionResult Edit(int id)
         {
             var appointment = _context.Appointments.FirstOrDefault(a => a.AppointmentId == id);
             if (appointment == null)
             {
                 return NotFound();
             }
-            return View(appointment);
+            ViewBag.Appointment = this._context.Appointments.ToList();
+            return View("Create", appointment);
         }
 
         // POST: /Appointment/EditAppointment/{id}
         [HttpPost]
-        public IActionResult EditAppointment(int id, string Title, string Description, DateTime AppointmentDate)
+        public IActionResult Edit(int id, string Title, string Description, DateTime AppointmentDate)
         {
             var appointment = _context.Appointments.FirstOrDefault(a => a.AppointmentId == id);
             if (appointment == null)
@@ -80,16 +76,10 @@ namespace AppointmentProject.Controllers
                 return NotFound();
             }
 
-            if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Description))
-            {
-                ModelState.AddModelError("", "All fields are required.");
-                return View(appointment);
-            }
-
             if (AppointmentDate < DateTime.Now)
             {
-                ModelState.AddModelError("", "Appointment date cannot be in the past.");
-                return View(appointment);
+                ViewData["ErrorMessage"] = "Appointment date cannot be in the past.";
+                return View("Create", appointment);
             }
 
             // Update appointment
@@ -101,12 +91,12 @@ namespace AppointmentProject.Controllers
             _context.SaveChanges();
 
             TempData["Message"] = "Appointment updated successfully.";
-            return RedirectToAction("ShowApp");
+            return RedirectToAction("appointment");
         }
 
         // GET: /Appointment/DeleteAppointment/{id}
         [HttpGet]
-        public IActionResult DeleteAppointment(int id)
+        public IActionResult Delete(int id)
         {
             var appointment = _context.Appointments.FirstOrDefault(a => a.AppointmentId == id);
             if (appointment == null)
@@ -115,9 +105,8 @@ namespace AppointmentProject.Controllers
             }
             return View(appointment);
         }
-
         // POST: /Appointment/DeleteAppointment/{id}
-        [HttpPost, ActionName("DeleteAppointment")]
+        [HttpPost, ActionName("Delete")]
         public IActionResult ConfirmDelete(int id)
         {
             var appointment = _context.Appointments.FirstOrDefault(a => a.AppointmentId == id);
@@ -130,7 +119,7 @@ namespace AppointmentProject.Controllers
             _context.SaveChanges();
 
             TempData["Message"] = "Appointment deleted successfully.";
-            return RedirectToAction("ShowApp");
+            return RedirectToAction("Appointment");
         }
     }
 }

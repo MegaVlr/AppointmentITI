@@ -3,34 +3,48 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AppointmentProject</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AppointmentProject.styles.css" asp-append-version="true" />
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Righteous&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="~/css/Appointments.css">
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
+
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Moa3ydy</a>
+
+
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item ">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Appointment" >Appointments</a>
+                            <a class="nav-link text-dark btn btn-info px-3 m-1" asp-area="" asp-controller="Appointment" asp-action="Appointment">Appointments</a>
+                        </li> <li class="nav-item">
+                            <a class="nav-link text-dark btn btn-primary px-3 m-1" asp-area="" asp-controller="Appointment" asp-action="Create">Create</a>
                         </li>
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
                         <li class="nav-item ">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignUp">Sign Up</a>
+                            <a class="nav-link text-dark btn btn-secondary px-3 m-1" asp-area="" asp-controller="Account" asp-action="SignUp">Sign Up</a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Signin">Sign In</a>
+                            <a class="nav-link text-dark btn btn-secondary px-3 m-1" asp-area="" asp-controller="Account" asp-action="Signin">Sign In</a>
                         </li>
                     </ul>
                 </div>
@@ -43,9 +57,15 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        
+    <footer class="border-top bg-light text-center text-muted py-3">
+        <div class="container">
+            <p class="mb-0">© Moa3ydy <span id="current-year"></span></p>
+        </div>
+        <script>
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        </script>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

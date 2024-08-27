@@ -5,11 +5,15 @@
 namespace AppointmentProject.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMigration : Migration
+    public partial class NewDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "IsDeleted",
+                table: "Appointments");
+
             migrationBuilder.EnsureSchema(
                 name: "Appo");
 
@@ -66,6 +70,13 @@ namespace AppointmentProject.Migrations
                 name: "ActivityLogs",
                 schema: "Appo",
                 newName: "ActivityLogs");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsDeleted",
+                table: "Appointments",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
         }
     }
 }

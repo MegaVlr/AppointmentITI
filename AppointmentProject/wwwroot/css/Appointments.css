@@ -1,5 +1,9 @@
-﻿body {
+﻿* {
+    font-family: "Righteous", cursive;
+}
+body {
     background-color: #f7ecde;
+    font-family: "Righteous", cursive;
 }
 
 .groub-box {
