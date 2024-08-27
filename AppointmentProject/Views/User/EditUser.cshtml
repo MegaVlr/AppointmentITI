@@ -1,0 +1,42 @@
+﻿@model User;
+@{
+    ViewBag.Title = "EditUser";
+}
+
+
+<!-- Form for editing a user (use a single user model instead of IEnumerable) -->
+<form method="post" asp-action="@ViewBag.Title" class="body w-100 p-3 py-4 mt-5 d-flex flex-column justify-content-center align-items-center gap-1">
+    <div class="w-100">
+        <label asp-for="Name" class="fw-bold">
+            <i class="fa-solid fa-user"></i> Name
+            <i class="fa-solid fa-asterisk fa-sm" style="color: #ff0000;"></i>
+        </label>
+        <input asp-for="Name" type="text" placeholder="Name" class="form-control mt-3" maxlength="40" required>
+    </div>
+
+    <div class="w-100">
+        <label asp-for="Email" class="fw-bold">
+            <i class="fa-solid fa-envelope"></i> Email
+            <i class="fa-solid fa-asterisk fa-sm" style="color: #ff0000;"></i>
+        </label>
+        <input asp-for="Email" type="email" placeholder="Email" class="form-control mt-3" required maxlength="90">
+    </div>
+
+    <div class="w-100">
+        <label asp-for="phoneNumber" class="fw-bold">
+            <i class="fa-solid fa-phone"></i> Phone Number
+            <i class="fa-solid fa-asterisk fa-sm" style="color: #ff0000;"></i>
+        </label>
+        <input asp-for="phoneNumber" type="text" placeholder="Phone Number" class="form-control mt-3" required maxlength="18">
+    </div>
+
+    <p id="messages" class="">
+        <span class="text-danger">@ViewData["ErrorMessage"]</span>
+        <span class="text-danger">@ViewData["Message"]</span>
+    </p>
+    <div class="w-100 m3 d-flex row-md justify-content-between align-items-center">
+        <a class="btn btn-warning px-5 m-0 w-25" href="@Url.Action("User", "User")">Back</a>
+        <a class="btn btn-danger mr-2 w-25" href="@Url.Action("ChangePassword", "User")">Change Password</a>
+    </div>
+        <button type="submit" class="btn btn-success px-5 m-0 w-25" id="submitBtn">Submit</button>
+</form>

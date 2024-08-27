@@ -1,0 +1,50 @@
+﻿@model AppointmentProject.Models.User
+
+@{
+    ViewBag.Title = "User";
+    var user = ViewBag.User as AppointmentProject.Models.User;
+}
+
+@if (user != null)
+{
+    <div class="body w-100 p-3 py-4 mt-5 d-flex flex-column justify-content-center align-items-center gap-1">
+        <div class=" w-100 m-3">
+            <label class="fw-bold">
+                <i class="fa-solid fa-id-card"></i> UserId
+            </label>
+            <div class="col-md-3 text-danger">@user.UserId</div>
+        </div>
+
+        <div class=" w-100 m-3">
+            <label class="fw-bold">
+                <i class="fa-solid fa-user"></i> Name
+               
+            </label>
+            <div class="col-md-3 text-danger">@user.Name</div>
+        </div>
+
+        <div class=" w-100 m-3">
+            <label class="fw-bold">
+                <i class="fa-solid fa-envelope"></i> Email
+               
+            </label>
+            <div class="col-md-3 text-primary">@user.Email</div>
+        </div>
+
+        <div class=" w-100 m-3">
+            <label class="fw-bold">
+                <i class="fa-solid fa-phone"></i> Phone Number
+               
+            </label>
+            <div class="col-md-3 text-dark">@user.phoneNumber</div>
+        </div>
+        <div class="w-100 m3 d-flex row-md justify-content-between align-items-center">
+        <a class="btn btn-warning mr-2 w-25" href="@Url.Action("EditUser", "User", new { id = user.UserId })">Edit</a>
+            <a class="btn btn-danger mr-2 w-25" href="@Url.Action("ChangePassword", "User", new { id = user.UserId })">Change Password</a>
+        </div>
+    </div>
+}
+else
+{
+    <p>No user found.</p>
+}
