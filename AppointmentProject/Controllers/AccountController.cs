@@ -117,6 +117,9 @@ namespace AppointmentProject.Controllers
                         resetEntry.IsUsed = true;
                         await _context.SaveChangesAsync(); // Use async save method
 
+                        // Log the creation action
+                        LogActivity(user.UserId, "Reset The Password");
+
                         // Optionally set a success message in ViewData if you want to show it on the view
                         ViewData["SuccessMessage"] = "Your password has been reset successfully.";
                         return RedirectToAction("ResetPasswordConfirmation");
@@ -200,7 +203,8 @@ namespace AppointmentProject.Controllers
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
-
+            // Log the creation action
+            LogActivity(newUser.UserId, "First SignUp");
             ViewBag.Message = "Registration successful!";
             return View();
         }
@@ -238,6 +242,8 @@ namespace AppointmentProject.Controllers
                 // Store token in ViewData to be accessed by JavaScript
                 ViewData["Token"] = token;
 
+                // Log the creation action
+                LogActivity(user.UserId, "SignedIn");
                 return RedirectToAction("Index", "Home");
             }
 
@@ -264,7 +270,6 @@ namespace AppointmentProject.Controllers
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: credentials
             );
-
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
@@ -276,6 +281,18 @@ namespace AppointmentProject.Controllers
             Response.Cookies.Delete("authToken");
             // Redirect to SignIn page
             return RedirectToAction("SignIn", "Account");
+        }
+        public void LogActivity(int userId, string action)
+        {
+            var activityLog = new ActivityLog
+            {
+                UserId = userId,
+                Action = action,
+                Timestamp = DateTime.Now
+            };
+
+            _context.ActivityLogs.Add(activityLog);
+            _context.SaveChanges();
         }
     }
 }

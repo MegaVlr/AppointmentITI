@@ -129,6 +129,8 @@ namespace AppointmentProject.Controllers
                     _context.Notifications.Add(newNotification);
                     _context.SaveChanges();
                 }
+                // Log the creation action
+                LogActivity(newAppointment.UserId, "Created an appointment");
                 return RedirectToAction("Appointment");
             }
             catch (Exception)
@@ -190,7 +192,8 @@ namespace AppointmentProject.Controllers
                     _context.SaveChanges();
                 }
             }
-
+            // Log the creation action
+            LogActivity(appointment.UserId, "Edit an appointment");
             return RedirectToAction("appointment");
         }
         // GET: /Appointment/DeleteAppointment/{id}
@@ -202,6 +205,8 @@ namespace AppointmentProject.Controllers
             {
                 return NotFound();
             }
+            // Log the creation action
+            LogActivity(appointment.UserId, "Delete an appointment");
             return View(appointment);
         }
         // POST: /Appointment/DeleteAppointment/{id}
@@ -220,5 +225,18 @@ namespace AppointmentProject.Controllers
             TempData["Message"] = "Appointment deleted successfully.";
             return RedirectToAction("Appointment");
         }
+        public void LogActivity(int userId, string action)
+        {
+            var activityLog = new ActivityLog
+            {
+                UserId = userId,
+                Action = action,
+                Timestamp = DateTime.Now
+            };
+
+            _context.ActivityLogs.Add(activityLog);
+            _context.SaveChanges();
+        }
+
     }
 }
