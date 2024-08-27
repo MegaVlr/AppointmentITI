@@ -1,7 +1,6 @@
 using AppointmentProject.Data;
 using Microsoft.EntityFrameworkCore;
 using AppointmentProject.Interfaces;
-using cfapp;
 
 namespace AppointmentProject
 {
@@ -18,7 +17,7 @@ namespace AppointmentProject
 
             builder.Services.AddDbContext<AppointmentDbContext>(options =>
             {
-                options.UseSqlServer(Connections.sqlConstr);
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
 

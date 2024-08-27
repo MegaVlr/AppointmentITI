@@ -10,21 +10,12 @@
     <title>@ViewData["Title"]</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="~/css/all.min.css">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="~/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/bootstrap-reboot.min.css">
-    <!-- Style CSS -->
-    <link rel="stylesheet" href="~/css/style.css">
-    <!-- Media CSS -->
-    <link rel="stylesheet" href="~/css/media.css">
 </head>
 <body>
     <div class="container my-5 text-center">
         <div class="groub-box m-auto w-75 p-5">
             <h1 class=""> SignIn </h1>
-            <form method="post" action="@Url.Action("SignIn", "Account")">
+            <form method="post" action="@Url.Action("SignIn", "Account")" onsubmit="storeToken()">
                 <input type="text" name="Email" id="emailLogin" class="form-control my-3 text-black" placeholder="Enter Your Email">
                 <input type="password" name="Password" id="passLogin" class="form-control my-3 text-black" placeholder="Enter Your Password">
                 <p id="incorrect" class="">
@@ -42,7 +33,15 @@
         </div>
     </div>
 
-    <script src="~/JS/bootstrap.bundle.min.js"></script>
-    <script src="~/JS/login.js"></script>
+
+    <script>
+        function storeToken() {
+            var token = '@ViewData["Token"]';
+            if (token) {
+                localStorage.setItem('authToken', token);
+            }
+        }
+    </script>
 </body>
 </html>
+

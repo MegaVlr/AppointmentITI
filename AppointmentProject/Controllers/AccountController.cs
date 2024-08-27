@@ -7,6 +7,10 @@ using AppointmentProject.Data;
 using AppointmentProject.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AppointmentProject.Controllers
 {
@@ -14,11 +18,13 @@ namespace AppointmentProject.Controllers
     {
         private readonly AppointmentDbContext _context;
         private readonly IEmailService _emailService; // Email service for sending emails
+        private readonly IConfiguration _configuration;
 
-        public AccountController(AppointmentDbContext context, IEmailService emailService)
+        public AccountController(AppointmentDbContext context, IEmailService emailService, IConfiguration configuration)
         {
             _context = context;
             _emailService = emailService;
+            _configuration = configuration;
         }
 
         // GET: /Account/ForgotPassword
@@ -220,8 +226,18 @@ namespace AppointmentProject.Controllers
 
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
-                //---------------------------------------------
-                // Set up authentication cookies or tokens here
+                // Generate token
+                var token = GenerateJwtToken(user);
+                Response.Cookies.Append("authToken", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    Expires = DateTime.UtcNow.AddHours(1) // Token expiration time
+                });
+
+                // Store token in ViewData to be accessed by JavaScript
+                ViewData["Token"] = token;
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -229,5 +245,41 @@ namespace AppointmentProject.Controllers
             return View();
         }
 
+        private string GenerateJwtToken(User user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Issuer"],
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            // Remove the authToken cookie
+            Response.Cookies.Delete("authToken");
+
+            // Redirect to SignIn page
+            return RedirectToAction("SignIn", "Account");
+        }
     }
 }
+
+
+

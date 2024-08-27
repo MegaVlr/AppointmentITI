@@ -9,38 +9,53 @@
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <h1>Appointments</h1>
 
-
-            <div class="container-sm">
-                <div class="align-self-xl-start mb-3">
-                    <a class="btn btn-primary" href="@Url.Action("Create")">New Appointment</a>
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewData["ErrorMessage"]
                 </div>
+            }
+            else
+            {
+                <div class="container-sm">
+                    <div class="align-self-xl-start mb-3">
+                        <a class="btn btn-primary" href="@Url.Action("Create")">New Appointment</a>
+                    </div>
 
-                <!-- Header section -->
-                <div class="row font-weight-bold text-info border-bottom pb-2">
-                    <div class="col-md-3">Title</div>
-                    <div class="col-md-3">Description</div>
-                    <div class="col-md-3">Date</div>
-                    <div class="col-md-3">Edit/Delete</div>
-                </div>
+                    <!-- Header section -->
+                    <div class="row font-weight-bold text-info border-bottom pb-2">
+                        <div class="col-md-3">Title</div>
+                        <div class="col-md-3">Description</div>
+                        <div class="col-md-3">Date</div>
+                        <div class="col-md-3">Edit/Delete</div>
+                    </div>
 
-                <!-- Appointment list -->
-                <div class="appointment-list">
-                    @foreach (var appointment in Model)
-                    {
-                        <div class="row appointment-item border-bottom py-3">
-                            <div class="col-md-3 text-danger">@appointment.Title</div>
-                            <div class="col-md-3 text-primary">@appointment.Description</div>
-                            <div class="col-md-3 text-dark">@appointment.AppointmentDate.ToString("MM/dd/yyyy HH:mm")</div>
-                            <div class="col-md-3">
-                                <a class="btn btn-warning mr-2" href="@Url.Action("Edit", new { id = appointment.AppointmentId })">Edit</a>
-                                <a class="btn btn-danger" href="@Url.Action("Delete", new { id = appointment.AppointmentId })">Delete</a>
+                    <!-- Appointment list -->
+                    <div class="appointment-list">
+                        @if (Model.Any())
+                        {
+                            @foreach (var appointment in Model)
+                            {
+                                <div class="row appointment-item border-bottom py-3">
+                                    <div class="col-md-3 text-danger">@appointment.Title</div>
+                                    <div class="col-md-3 text-primary">@appointment.Description</div>
+                                    <div class="col-md-3 text-dark">@appointment.AppointmentDate.ToString("MM/dd/yyyy HH:mm")</div>
+                                    <div class="col-md-3">
+                                        <a class="btn btn-warning mr-2" href="@Url.Action("Edit", new { id = appointment.AppointmentId })">Edit</a>
+                                        <a class="btn btn-danger" href="@Url.Action("Delete", new { id = appointment.AppointmentId })">Delete</a>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                No appointments found.
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     </main>
 </body>
-
-</html>

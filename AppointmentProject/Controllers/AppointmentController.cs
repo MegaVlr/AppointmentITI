@@ -2,27 +2,65 @@
 using AppointmentProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 
 namespace AppointmentProject.Controllers
 {
     public class AppointmentController : Controller
     {
         private readonly AppointmentDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AppointmentController(AppointmentDbContext context)
+        public AppointmentController(AppointmentDbContext context,IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
        
         // GET: /Appointment/Appointment
         [HttpGet]
         public IActionResult Appointment()
-            
         {
-            List <Appointment> appointments = _context.Appointments.ToList(); // Fetch all appointments
-            return View(appointments);
+            var token = Request.Cookies["authToken"];
+            if (string.IsNullOrEmpty(token))
+            {
+                ViewData["ErrorMessage"] = "You are not logged in yet.";
+                return RedirectToAction("SignIn", "Account"); // Redirect to an error view or another appropriate view
+            }
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var userId = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+
+                var appointments = _context.Appointments
+                    .Where(a => a.UserId.ToString() == userId)
+                    .ToList();
+
+                return View(appointments);
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMessage"] = "Invalid or expired token. Please login again.";
+                return RedirectToAction("SignIn", "Account");
+            }
         }
+
 
         // Get: /Appointment/AddAppointment
         [HttpGet]
@@ -33,26 +71,74 @@ namespace AppointmentProject.Controllers
         }
         // POST: /Appointment/AddAppointment
         [HttpPost]
-       public IActionResult Create(string Title, string Description, DateTime AppointmentDate)
+        public IActionResult Create(string Title, string Description, DateTime AppointmentDate)
         {
-            if (AppointmentDate < DateTime.Now)
+            // Ensure that the User is Logged In
+            var token = Request.Cookies["authToken"];
+            if (string.IsNullOrEmpty(token))
             {
-                ViewData["ErrorMessage"] = "Appointment date cannot be in the past.";
-                return View("Create");
+                ViewData["ErrorMessage"] = "Please Login First";
+                return RedirectToAction("SignIn", "Account");
             }
 
-            var newAppointment = new Appointment
+            // Validate and decode the token
+            try
             {
-                UserId = 1, 
-                Title = Title,
-                Description = Description,
-                AppointmentDate = AppointmentDate,
-                CreatedDate = DateTime.Now,
-            };
-            _context.Appointments.Add(newAppointment);
-            int result = _context.SaveChanges(); 
-            return RedirectToAction("appointment");
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]); // Ensure the key matches the one used for signing
+
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                // Extract user information if needed
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var userId = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+
+                // Optionally: Validate user existence in database
+                // var user = _context.Users.Find(int.Parse(userId));
+                // if (user == null)
+                // {
+                //     ViewData["ErrorMessage"] = "User not found.";
+                //     return RedirectToAction("SignIn", "Account");
+                // }
+
+                //-------------------------------------------------
+
+                if (AppointmentDate < DateTime.Now)
+                {
+                    ViewData["ErrorMessage"] = "Appointment date cannot be in the past.";
+                    return View("Create");
+                }
+
+                var newAppointment = new Appointment
+                {
+                    // UserId should be derived from the token or session, not hardcoded
+                    UserId = int.Parse(userId),
+                    Title = Title,
+                    Description = Description,
+                    AppointmentDate = AppointmentDate,
+                    CreatedDate = DateTime.Now,
+                };
+                _context.Appointments.Add(newAppointment);
+                _context.SaveChanges();
+                return RedirectToAction("Appointment");
+            }
+            catch (Exception ex)
+            {
+                // Handle token validation errors
+                ViewData["ErrorMessage"] = "Invalid or expired token. Please login again.";
+                return RedirectToAction("SignIn", "Account");
+            }
         }
+
+
         // GET: /Appointment/Edit/{id}
         [HttpGet]
         public IActionResult Edit(int id)

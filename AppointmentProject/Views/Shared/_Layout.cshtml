@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Azure.Core;
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,46 +21,58 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Moa3ydy</a>
-
-
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item ">
+                        <li class="nav-item">
                             <a class="nav-link text-dark btn btn-info px-3 m-1" asp-area="" asp-controller="Appointment" asp-action="Appointment">Appointments</a>
-                        </li> <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark btn btn-primary px-3 m-1" asp-area="" asp-controller="Appointment" asp-action="Create">Create</a>
                         </li>
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
-                        <li class="nav-item ">
-                            <a class="nav-link text-dark btn btn-secondary px-3 m-1" asp-area="" asp-controller="Account" asp-action="SignUp">Sign Up</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link text-dark btn btn-secondary px-3 m-1" asp-area="" asp-controller="Account" asp-action="Signin">Sign In</a>
-                        </li>
+                        <!-- Conditionally display sign-in, sign-up, and sign-out buttons -->
+                        @{
+                            var isLoggedIn = Context.Request.Cookies["authToken"] != null;
+                        }
+                        @if (!isLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-secondary px-3 m-1" asp-area="" asp-controller="Account" asp-action="SignUp">Sign Up</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-secondary px-3 m-1" asp-area="" asp-controller="Account" asp-action="SignIn">Sign In</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-danger px-3 m-1" href="@Url.Action("Logout", "Account")">Log Out</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top bg-light text-center text-muted py-3">
+    <footer class="border-top bg-light text-center text-muted py-3 fixed-bottom">
         <div class="container">
             <p class="mb-0">© Moa3ydy <span id="current-year"></span></p>
         </div>
@@ -72,3 +87,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
