@@ -77,26 +77,32 @@ namespace AppointmentProject.Controllers
             {
                 return NotFound();
             }
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Email)|| string.IsNullOrEmpty(PhoneNumber))
+
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(PhoneNumber))
             {
                 ViewBag.Message = "All fields are required.";
-                return View();
+                return View(user);
             }
 
-            // Check if email already exists
-            var existingUser = _context.Users.SingleOrDefault(u => u.Email == Email);
-            var existingPhoneNumber = _context.Users.SingleOrDefault(p => p.phoneNumber == PhoneNumber);
+            // Check if email already exists (excluding the current user)
+            var existingUser = _context.Users
+                .SingleOrDefault(u => u.Email == Email && u.UserId != id);
             if (existingUser != null)
             {
                 ViewBag.Message = "Email already exists.";
-                return View();
-            }
-            if (existingPhoneNumber != null)
-            {
-                ViewBag.Message = "PhoneNumber already exists.";
-                return View();
+                return View(user);
             }
 
+            // Check if phone number already exists (excluding the current user)
+            var existingPhoneNumber = _context.Users
+                .SingleOrDefault(p => p.phoneNumber == PhoneNumber && p.UserId != id);
+            if (existingPhoneNumber != null)
+            {
+                ViewBag.Message = "Phone number already exists.";
+                return View(user);
+            }
+
+            // Update user details
             user.Name = Name;
             user.Email = Email;
             user.phoneNumber = PhoneNumber;
@@ -108,10 +114,10 @@ namespace AppointmentProject.Controllers
 
             if (result > 0)
             {
- 
+                // Optional: Add additional logic if needed
             }
 
-            return RedirectToAction("User"); 
+            return RedirectToAction("User");
         }
 
         // GET: /User/ChangePassword/{id}
@@ -154,6 +160,38 @@ namespace AppointmentProject.Controllers
             TempData["Message"] = "Password changed successfully.";
             return RedirectToAction("User");
         }
+
+        // GET: /User/DeleteUser/{id}
+        [HttpGet]
+        public IActionResult DeleteUser()
+        {
+            return View();
+        }
+        // POST: /User/DeleteUser/{id}
+        [HttpPost]
+        public IActionResult DeleteUser(int id)
+        {
+            // ابحث عن المستخدم في قاعدة البيانات باستخدام المعرف (id)
+            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+
+            if (user == null)
+            {
+                // إذا كان المستخدم غير موجود، عرض رسالة خطأ
+                ViewData["ErrorMessage"] = "User not found.";
+                return View();
+            }
+
+            // احذف المستخدم من قاعدة البيانات
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+
+            // عرض رسالة تأكيد بأن الحذف تم بنجاح
+            ViewData["Message"] = "User deleted successfully.";
+
+            // إعادة توجيه إلى قائمة المستخدمين أو عرض صفحة الحذف مع الرسائل
+            return RedirectToAction("User", "User");
+        }
+
     }
 }
 

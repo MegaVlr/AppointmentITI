@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Delete User";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-action="DeleteUser" method="post" onsubmit="return confirmDelete();">
+
+    <!-- Display messages -->
+    <div class="alert-container">
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewData["ErrorMessage"]
+            </div>
+        }
+        @if (ViewData["Message"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @ViewData["Message"]
+            </div>
+        }
+    </div>
+
+    <div class="alert alert-warning" role="alert">
+        <strong>Warning:</strong> Are you sure you want to delete this user? This action cannot be undone.
+    </div>
+
+
+    <div class="w-100 m-3 d-flex row-md justify-content-between align-items-center">
+        <a class="btn btn-warning px-5 m-0 w-25" href="@Url.Action("User", "User")">Back</a>
+        <button type="submit" class="btn btn-success px-5 m-0 w-25">Submit</button>
+    </div>
+</form>
+
+
+<script>
+    function confirmDelete() {
+        return confirm('Are you sure you want to delete this user? This action cannot be undone.');
+    }
+</script>
+

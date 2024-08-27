@@ -1,10 +1,9 @@
 ﻿@using Azure.Core;
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
-@using System.Security.Claims
 
-<!-- Conditionally display sign-in, sign-up, and sign-out buttons -->
-@model AppointmentProject.Models.User
+
+
 @{
     var isLoggedIn = Context.Request.Cookies["authToken"] != null;
 }

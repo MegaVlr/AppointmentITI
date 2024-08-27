@@ -29,6 +29,9 @@
         <span class="text-danger">@ViewData["ErrorMessage"]</span>
         <span class="text-success">@ViewData["Message"]</span>
     </p>
-
-    <button type="submit" class="btn btn-outline-success px-5 m-0" id="submitBtn">Submit</button>
+    <div class="w-100 m3 d-flex row-md justify-content-between align-items-center align-content-center">
+        <a class="btn btn-warning px-5 m-0 w-25" href="@Url.Action("Appointment", "Appointment")">Back</a>
+        <button type="submit" class="btn btn-outline-success px-5 m-0 w-25" id="submitBtn">Submit</button>
+    </div>
+    
 </form>
