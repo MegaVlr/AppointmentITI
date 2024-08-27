@@ -14,12 +14,11 @@ namespace AppointmentProject.Controllers
         private readonly AppointmentDbContext _context;
         private readonly IConfiguration _configuration;
 
-        public AppointmentController(AppointmentDbContext context,IConfiguration configuration)
+        public AppointmentController(AppointmentDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
-       
         // GET: /Appointment/Appointment
         [HttpGet]
         public IActionResult Appointment()
@@ -28,7 +27,7 @@ namespace AppointmentProject.Controllers
             if (string.IsNullOrEmpty(token))
             {
                 ViewData["ErrorMessage"] = "You are not logged in yet.";
-                return RedirectToAction("SignIn", "Account"); // Redirect to an error view or another appropriate view
+                return RedirectToAction("SignIn", "Account");
             }
 
             try
@@ -56,11 +55,11 @@ namespace AppointmentProject.Controllers
             }
             catch (Exception ex)
             {
+                // Log exception (ex) if needed
                 ViewData["ErrorMessage"] = "Invalid or expired token. Please login again.";
                 return RedirectToAction("SignIn", "Account");
             }
         }
-
 
         // Get: /Appointment/AddAppointment
         [HttpGet]
@@ -119,16 +118,15 @@ namespace AppointmentProject.Controllers
 
                 var newAppointment = new Appointment
                 {
-                    // UserId should be derived from the token or session, not hardcoded
-                    UserId = int.Parse(userId),
+                    UserId = 1,
                     Title = Title,
                     Description = Description,
                     AppointmentDate = AppointmentDate,
                     CreatedDate = DateTime.Now,
                 };
                 _context.Appointments.Add(newAppointment);
-                _context.SaveChanges();
-                return RedirectToAction("Appointment");
+                int result = _context.SaveChanges();
+                return RedirectToAction("appointment");
             }
             catch (Exception ex)
             {
@@ -151,7 +149,6 @@ namespace AppointmentProject.Controllers
             ViewBag.Appointment = this._context.Appointments.ToList();
             return View("Create", appointment);
         }
-
         // POST: /Appointment/EditAppointment/{id}
         [HttpPost]
         public IActionResult Edit(int id, string Title, string Description, DateTime AppointmentDate)
@@ -174,12 +171,25 @@ namespace AppointmentProject.Controllers
             appointment.AppointmentDate = AppointmentDate;
 
             _context.Appointments.Update(appointment);
-            _context.SaveChanges();
+            int result = _context.SaveChanges();
 
             TempData["Message"] = "Appointment updated successfully.";
+
+            if (result > 0)
+            {
+                var editNotification = _context.Notifications.FirstOrDefault(n => n.AppointmentId == appointment.AppointmentId);
+                if (editNotification != null)
+                {
+                    editNotification.Notification_Data_Time = AppointmentDate.AddHours(-1); // تحديث الإشعار ليكون قبل الموعد بساعة
+                    editNotification.IsSent = false;
+
+                    _context.Notifications.Update(editNotification);
+                    _context.SaveChanges();
+                }
+            }
+
             return RedirectToAction("appointment");
         }
-
         // GET: /Appointment/DeleteAppointment/{id}
         [HttpGet]
         public IActionResult Delete(int id)

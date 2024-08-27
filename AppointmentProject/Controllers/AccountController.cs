@@ -274,7 +274,6 @@ namespace AppointmentProject.Controllers
         {
             // Remove the authToken cookie
             Response.Cookies.Delete("authToken");
-
             // Redirect to SignIn page
             return RedirectToAction("SignIn", "Account");
         }
