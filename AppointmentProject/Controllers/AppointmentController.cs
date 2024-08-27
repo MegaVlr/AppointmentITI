@@ -115,7 +115,20 @@ namespace AppointmentProject.Controllers
                     CreatedDate = DateTime.Now,
                 };
                 _context.Appointments.Add(newAppointment);
-                _context.SaveChanges();
+               var result = _context.SaveChanges();
+
+                if (result > 0)
+                {
+                    var newNotification = new Notification
+                    {
+                        AppointmentId = newAppointment.AppointmentId,
+                        Notification_Data_Time = AppointmentDate.AddHours(-1), 
+                        IsSent = false
+                    };
+
+                    _context.Notifications.Add(newNotification);
+                    _context.SaveChanges();
+                }
                 return RedirectToAction("Appointment");
             }
             catch (Exception)
