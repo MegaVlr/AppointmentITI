@@ -96,19 +96,9 @@ namespace AppointmentProject.Controllers
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                // Extract user information if needed
+                // Extract user information from token
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
-
-                // Optionally: Validate user existence in database
-                // var user = _context.Users.Find(int.Parse(userId));
-                // if (user == null)
-                // {
-                //     ViewData["ErrorMessage"] = "User not found.";
-                //     return RedirectToAction("SignIn", "Account");
-                // }
-
-                //-------------------------------------------------
 
                 if (AppointmentDate < DateTime.Now)
                 {
@@ -118,17 +108,17 @@ namespace AppointmentProject.Controllers
 
                 var newAppointment = new Appointment
                 {
-                    UserId = 1,
+                    UserId = int.Parse(userId),
                     Title = Title,
                     Description = Description,
                     AppointmentDate = AppointmentDate,
                     CreatedDate = DateTime.Now,
                 };
                 _context.Appointments.Add(newAppointment);
-                int result = _context.SaveChanges();
-                return RedirectToAction("appointment");
+                _context.SaveChanges();
+                return RedirectToAction("Appointment");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle token validation errors
                 ViewData["ErrorMessage"] = "Invalid or expired token. Please login again.";
