@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AppointmentProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce58186f4da51b251d5e46502b9c5fb6fe08ad68")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+273e6f6e78e411da81132e82357653ae66d27819")]
 [assembly: System.Reflection.AssemblyProductAttribute("AppointmentProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AppointmentProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

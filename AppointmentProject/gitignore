@@ -24,6 +24,6 @@ obj/
 .idea/
 
 # Ignore Json File
-#appsettings.json
-#appsettings.Development.json
+appsettings.json
+appsettings.Development.json
 

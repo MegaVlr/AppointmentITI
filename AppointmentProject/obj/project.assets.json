@@ -4151,19 +4151,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ae386\\.nuget\\packages\\": {}
+    "C:\\Users\\MEGA\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Backend\\ITI\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
+      "projectUniqueName": "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
       "projectName": "AppointmentProject",
-      "projectPath": "D:\\Backend\\ITI\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
-      "packagesPath": "C:\\Users\\ae386\\.nuget\\packages\\",
-      "outputPath": "D:\\Backend\\ITI\\AppointmentITI\\AppointmentProject\\obj\\",
+      "projectPath": "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\AppointmentProject.csproj",
+      "packagesPath": "C:\\Users\\MEGA\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\MEGA\\Source\\Repos\\AhmedEmadkh\\AppointmentITI\\AppointmentProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ae386\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\MEGA\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
